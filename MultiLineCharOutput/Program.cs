@@ -5,6 +5,14 @@ namespace MultiLineCharOutput {
     class Program {
 
         static void Main(string[] args) {
+            (new Program()).Run();
+        }
+        void Run() { 
+            var cfg = new XmlConfig();
+            cfg.CheckNbr++;
+            cfg.EftNbr--;
+            cfg.Dispose();
+            return;
             var or1 = new OutRec();
             or1.OutLine1.Field1 = "ABCDEFGHIJ";
             or1.OutLine1.Field2 = "XXXXX";
