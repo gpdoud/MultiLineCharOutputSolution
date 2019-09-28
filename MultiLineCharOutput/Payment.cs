@@ -15,6 +15,7 @@ namespace MultiLineCharOutput {
         public string PaymentMethod { get; set; }
         public string CreditDebitFlag { get; set; }
         public string TransactionNumber { get; set; }
+        public DateTime ValueDate { get; set; }
 
         public string ToFixedTextLine() {
             var sb = new StringBuilder();
@@ -23,6 +24,7 @@ namespace MultiLineCharOutput {
             sb.Append(this.PaymentMethod.ToFixedString(3));
             sb.Append(this.CreditDebitFlag.ToFixedString(1));
             sb.Append(this.TransactionNumber.ToFixedString(30));
+            sb.Append(this.ValueDate.ToString("yyyy-MM-dd").ToFixedString(10));
             
             return sb.ToString();
         }
@@ -34,8 +36,9 @@ namespace MultiLineCharOutput {
                 case "E": this.PaymentMethod = PaymentMethodEft; break;
                 default: this.PaymentMethod = PaymentMethodUnknown; break;
             }
-            this.CreditDebitFlag = SetDebitCreditFlag();
+            this.CreditDebitFlag = SetDebitCreditFlag("???");
             this.TransactionNumber = SetTransactionNumber(this.PaymentMethod);
+            this.ValueDate = DateTime.Now;
         }
 
         private string SetTransactionNumber(string PaymentMethod) {
@@ -43,7 +46,7 @@ namespace MultiLineCharOutput {
             sb.Append(DateTime.Now.ToString("yyyyMMdd"));
             var curLen = sb.ToString().Length;
             var maxLen = PaymentMethod == PaymentMethodCheck ? 30 : 15;
-            var serialNbr = _nextTransNbr.ToFixedStringRight(maxLen - curLen++, '0');
+            var serialNbr = _nextTransNbr++.ToFixedStringRight(maxLen - curLen, '0');
             sb.Append(serialNbr);
             return sb.ToString();
         }

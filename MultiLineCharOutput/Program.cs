@@ -4,7 +4,21 @@ namespace MultiLineCharOutput {
 
     class Program {
 
+        void Run() {
+            var hdr = new Header();
+            var cpymt = new Payment("C");
+            var epymt = new Payment("E");
+            Debug(hdr.ToFixedTextLine());
+            Debug(cpymt.ToFixedTextLine());
+            Debug(epymt.ToFixedTextLine());
+        }
+        void Debug(string msg) {
+            System.Diagnostics.Debug.WriteLine(msg);
+        }
         static void Main(string[] args) {
+            (new Program()).Run();
+        }
+        void TestPrototype() { 
             var or1 = new OutRec();
             or1.OutLine1.Field1 = "ABCDEFGHIJ";
             or1.OutLine1.Field2 = "XXXXX";

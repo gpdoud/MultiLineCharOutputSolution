@@ -6,7 +6,7 @@ namespace MultiLineCharOutput {
     
     public class Header : IFixedTextLine {
 
-        public string RecordId { get; }; // "HD"
+        public string RecordId { get; } // "HD"
         public string FileControlNumber { get; } // "WF" + zero-fill 13 digit nbr
         public string FileDate { get; } // YYYY-MM-DD
 
