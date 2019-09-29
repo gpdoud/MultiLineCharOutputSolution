@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MultiLineCharOutput.Debug;
 
 namespace MultiLineCharOutput {
 
@@ -13,13 +14,13 @@ namespace MultiLineCharOutput {
         public int Field5 { get; set; }
 
         public string ToLine() {
-            return "D1|"
+            return "D1"
                    + $"{Field1.ToFixedString(10)}"
-                   + $"|{Field2.ToFixedString(10)}"
-                   + $"|{Field3.ToFixedString(10)}"
-                   + $"|{Field4.ToFixedString(10)}"
-                   + $"|{Field5.ToFixedStringRight(10, '0')}"
-                   + "|";
+                   + $"{Field2.ToFixedString(10)}"
+                   + $"{Field3.ToFixedString(10)}"
+                   + $"{Field4.ToFixedString(10)}"
+                   + $"{Field5.ToFixedStringRight(10, '0')}"
+                   + "";
         }
 
         public OutLine2() {}

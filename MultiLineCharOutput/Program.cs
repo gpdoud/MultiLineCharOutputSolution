@@ -6,11 +6,13 @@ namespace MultiLineCharOutput {
 
         void Run() {
             var hdr = new Header();
-            var cpymt = new Payment("C");
-            var epymt = new Payment("E");
             Debug(hdr.ToFixedTextLine());
-            Debug(cpymt.ToFixedTextLine());
-            Debug(epymt.ToFixedTextLine());
+
+            var aplist = AP.SqlQueryAp;
+            foreach(var ap in aplist) {
+                var pymt = new Payment(ap);
+                Debug(pymt.ToFixedTextLine());
+            }
         }
         void Debug(string msg) {
             System.Diagnostics.Debug.WriteLine(msg);
