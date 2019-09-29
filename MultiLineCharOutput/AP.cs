@@ -8,9 +8,14 @@ namespace MultiLineCharOutput {
 
         public static IList<AP> SqlQueryAp = new List<AP>() {
             new AP { PaymentMode = "C", CheckAmt = 123.45m, CheckDate = DateTime.Now },
-            new AP { PaymentMode = "E", EftAmt = 678.90m, EffectiveDate = DateTime.Now },
+            new AP { PaymentMode = "E", CreditMemoInd = "D", EftAmt = 678.90m, EffectiveDate = DateTime.Now, 
+                PaymentCurrencyCode = "CAD" },
             new AP { PaymentMode = "X" }
         };
+
+        #warning AP.PaymentCurrencyCode is an unverfied property
+        public string PaymentCurrencyCode { get; set; } = "USD";
+        public string SecCode { get; set; } = "XXX"; // other: ARC, BOC, TEL
 
         public string StatusInd { get; set; }
         public string Bank { get; set; }
@@ -20,7 +25,7 @@ namespace MultiLineCharOutput {
         public string RcrsTransitRoute { get; set; }
         public string RcrsAccountNum { get; set; }
         public string CompanyCode { get; set; }
-        public string CreditMemoInd { get; set; }
+        public string CreditMemoInd { get; set; } = "C";
         public decimal DiscountAmt { get; set; }
         public string EftAdviceNum { get; set; }
         public decimal EftAmt { get; set; }

@@ -2,15 +2,31 @@
 
 namespace MultiLineCharOutput {
 
+    public class PaymentMode {
+        public const string Check = "C";
+        public const string Eft = "E";
+    }
+
     class Program {
 
         void Run() {
             var hdr = new Header();
             Debug(hdr.ToFixedTextLine());
 
+            Payment pymt = null;
             var aplist = AP.SqlQueryAp;
             foreach(var ap in aplist) {
-                var pymt = new Payment(ap);
+                switch(ap.PaymentMode) {
+                    case PaymentMode.Check:
+                        pymt = new CheckPayment(ap);
+                        break;
+                    case PaymentMode.Eft:
+                        pymt = new EftPayment(ap);
+                        break;
+                    default:
+                        pymt = new Payment(ap);
+                        break;
+                }
                 Debug(pymt.ToFixedTextLine());
             }
         }
