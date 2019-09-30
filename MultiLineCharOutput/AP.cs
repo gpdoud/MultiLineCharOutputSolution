@@ -10,7 +10,7 @@ namespace MultiLineCharOutput {
             new AP { PaymentMode = "C", CheckAmt = 123.45m, CheckDate = DateTime.Now },
             new AP { PaymentMode = "E", CreditMemoInd = "D", EftAmt = 678.90m, EffectiveDate = DateTime.Now, 
                 PaymentCurrencyCode = "CAD", OrigAccountType = "D", RecvPartAcctType = "S",
-                RcrsAccountNum = "123456789"
+                RcrsAccountNum = "123456789", RcrsTransitRoute = "7654321"
             },
             new AP { PaymentMode = "X" }
         };
@@ -20,13 +20,14 @@ namespace MultiLineCharOutput {
         public string SecCode { get; set; } = "XXX"; // other: ARC, BOC, TEL
         public string OrigAccountType { get; set; } = "G"; // or D (demand deposit acct) or MCA
         public string RecvPartAcctType { get; set; } = "C"; // D, G, or S
+        public string RecvBankPrimaryIdType { get; set; } = string.Empty;
 
         public string StatusInd { get; set; }
         public string Bank { get; set; }
         public string BankAccount { get; set; }
         public string AdvicePrint { get; set; }
         public string CombinePrint { get; set; }
-        public string RcrsTransitRoute { get; set; }
+        public string RcrsTransitRoute { get; set; } // should be zero fill to 9
         public string RcrsAccountNum { get; set; }
         public string CompanyCode { get; set; }
         public string CreditMemoInd { get; set; } = "C";

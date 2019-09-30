@@ -5,7 +5,7 @@ using MultiLineCharOutput.Release;
 
 namespace MultiLineCharOutput {
 
-    public class Payment : IFixedTextLine {
+    public abstract class Payment : IFixedTextLine {
         public static int _transNbr { get; protected set; } = 1;
 
         public const string PaymentMethodCheck = "CHK";
@@ -25,6 +25,8 @@ namespace MultiLineCharOutput {
         public string OrigBankId { get; set; } = "053101561";
         public string RecvPartyAcctType { get; set; }
         public string RcrsAccountNum { get; set; }
+        public string RecvBankPrimaryIdType { get; set; }
+        public string RecvBankPrimaryId { get; set; }
 
         public string ToFixedTextLine() {
             var sb = new StringBuilder();
@@ -42,6 +44,8 @@ namespace MultiLineCharOutput {
             sb.Append(this.OrigBankId.ToFixedString(11));
             sb.Append(this.RecvPartyAcctType.ToFixedString(1));
             sb.Append(this.RcrsAccountNum.ToFixedString(35));
+            sb.Append(this.RecvBankPrimaryIdType.ToFixedString(3));
+            sb.Append(this.RecvBankPrimaryId.ToFixedString(11));
             
             return sb.ToString();
         }
@@ -49,15 +53,23 @@ namespace MultiLineCharOutput {
         public Payment(AP ap) {
             _transNbr++;
             this.RecordId = "PY";
-            SetPropertiesBasedOnPaymentMode(ap);
             this.CreditDebitFlag = SetCreditDebitFlag(ap);
             this.TransactionNumber = SetTransactionNumber(ap);
             this.CurrencyCode = ap.PaymentCurrencyCode;
             this.OrigAccountType = ap.OrigAccountType;
             this.RecvPartyAcctType = SetRecvPartyAcctType(ap);
             this.RcrsAccountNum = SetRcrsAccountNum(ap);
+            this.RecvBankPrimaryIdType = ap.RecvBankPrimaryIdType;
+            this.RecvBankPrimaryId = string.Empty;
         }
 
+        protected abstract string SetTransactionNumber(AP ap);
+        /// <summary>
+        /// RcrsAccountNum
+        /// Is blank unless it is an EFT payment
+        /// </summary>
+        /// <param name="ap"></param>
+        /// <returns></returns>
         protected virtual string SetRcrsAccountNum(AP ap) {
             return string.Empty;
         }
@@ -77,20 +89,6 @@ namespace MultiLineCharOutput {
                 case "S": return "S";
                 default: return "-";
             }
-        }
-
-        protected virtual void SetPropertiesBasedOnPaymentMode(AP ap) {
-            this.PaymentMethod = PaymentMethodUnknown;
-            this.PaymentAmount = 0;
-            this.ValueDate = DateTime.MaxValue;
-        }
-
-        protected virtual string SetTransactionNumber(AP ap) {
-            var sb = new StringBuilder();
-            sb.Append(DateTime.Now.ToString("yyyyMMdd"));
-            var curLen = sb.ToString().Length;
-            sb.Append(_transNbr.ToFixedStringRight(30-curLen, '0'));
-            return sb.ToString();
         }
 
         protected virtual string SetCreditDebitFlag(AP ap) {

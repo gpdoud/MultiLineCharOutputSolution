@@ -12,6 +12,9 @@ namespace MultiLineCharOutput.Debug {
         public static string ToFixedString(this int anInt, int len) {
             return "|" + anInt.ToString().ToFixedString(len) + "|";
         }
+        public static string ToFixedStringRight(this string str, int len, char fill = ' ') {
+            return "|" + str.ToString().PadLeft(len, fill) + "|";
+        }
         public static string ToFixedStringRight(this int anInt, int len, char fill = ' ') {
             return "|" + anInt.ToString().PadLeft(len, fill) + "|";
         }

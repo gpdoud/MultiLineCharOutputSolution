@@ -10,11 +10,6 @@ namespace MultiLineCharOutput {
         protected override string SetRcrsAccountNum(AP ap) {
             return ap.RcrsAccountNum;
         }
-        protected override void SetPropertiesBasedOnPaymentMode(AP ap) {
-            this.PaymentMethod = PaymentMethodEft;
-            this.PaymentAmount = ap.EftAmt;
-            this.ValueDate = ap.EffectiveDate;
-        }
         protected override string SetTransactionNumber(AP ap) {
             var sb = new StringBuilder();
             sb.Append(DateTime.Now.ToString("yyyyMMdd"));
@@ -31,7 +26,11 @@ namespace MultiLineCharOutput {
             return dbFlag;
         }
         public EftPayment(AP ap) : base(ap) {
-            
+            this.PaymentMethod = PaymentMethodEft;
+            this.PaymentAmount = ap.EftAmt;
+            this.ValueDate = ap.EffectiveDate;
+            this.RecvBankPrimaryIdType = "ABA";
+            this.RecvBankPrimaryId = ap.RcrsTransitRoute.ToFixedStringRight(9, '0');
         }
     }
 }

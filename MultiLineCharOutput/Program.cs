@@ -27,7 +27,7 @@ namespace MultiLineCharOutput {
                         pymt = new EftPayment(ap);
                         break;
                     default:
-                        pymt = new Payment(ap);
+                        pymt = new UnknownPayment(ap);
                         break;
                 }
                 AppendToOutput(pymt.ToFixedTextLine());
