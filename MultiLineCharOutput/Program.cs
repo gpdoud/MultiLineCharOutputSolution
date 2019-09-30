@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MultiLineCharOutput {
 
@@ -9,9 +10,11 @@ namespace MultiLineCharOutput {
 
     class Program {
 
+        List<string> linesOut = new List<string>();
+
         void Run() {
             var hdr = new Header();
-            Debug(hdr.ToFixedTextLine());
+            AppendToOutput(hdr.ToFixedTextLine());
 
             Payment pymt = null;
             var aplist = AP.SqlQueryAp;
@@ -27,10 +30,11 @@ namespace MultiLineCharOutput {
                         pymt = new Payment(ap);
                         break;
                 }
-                Debug(pymt.ToFixedTextLine());
+                AppendToOutput(pymt.ToFixedTextLine());
             }
         }
-        void Debug(string msg) {
+        void AppendToOutput(string msg) {
+            linesOut.Add(msg);
             System.Diagnostics.Debug.WriteLine(msg);
         }
         static void Main(string[] args) {

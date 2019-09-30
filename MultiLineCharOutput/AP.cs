@@ -9,13 +9,17 @@ namespace MultiLineCharOutput {
         public static IList<AP> SqlQueryAp = new List<AP>() {
             new AP { PaymentMode = "C", CheckAmt = 123.45m, CheckDate = DateTime.Now },
             new AP { PaymentMode = "E", CreditMemoInd = "D", EftAmt = 678.90m, EffectiveDate = DateTime.Now, 
-                PaymentCurrencyCode = "CAD" },
+                PaymentCurrencyCode = "CAD", OrigAccountType = "D", RecvPartAcctType = "S",
+                RcrsAccountNum = "123456789"
+            },
             new AP { PaymentMode = "X" }
         };
 
-        #warning AP.PaymentCurrencyCode is an unverfied property
+        #warning Unverfied properties exist
         public string PaymentCurrencyCode { get; set; } = "USD";
         public string SecCode { get; set; } = "XXX"; // other: ARC, BOC, TEL
+        public string OrigAccountType { get; set; } = "G"; // or D (demand deposit acct) or MCA
+        public string RecvPartAcctType { get; set; } = "C"; // D, G, or S
 
         public string StatusInd { get; set; }
         public string Bank { get; set; }

@@ -7,12 +7,15 @@ namespace MultiLineCharOutput {
     
     public class EftPayment : Payment {
 
+        protected override string SetRcrsAccountNum(AP ap) {
+            return ap.RcrsAccountNum;
+        }
         protected override void SetPropertiesBasedOnPaymentMode(AP ap) {
             this.PaymentMethod = PaymentMethodEft;
             this.PaymentAmount = ap.EftAmt;
             this.ValueDate = ap.EffectiveDate;
         }
-        protected override string SetTransactionNumber(string PaymentMethod) {
+        protected override string SetTransactionNumber(AP ap) {
             var sb = new StringBuilder();
             sb.Append(DateTime.Now.ToString("yyyyMMdd"));
             var curLen = sb.ToString().Length;
