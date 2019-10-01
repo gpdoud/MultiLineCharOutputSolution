@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MultiLineCharOutput {
+namespace MultiLineCharOutput.Payment {
     
-    public class UnknownPayment : Payment {
+    public class UnknownPayment : BasePayment {
 
         protected override string SetTransactionNumber(AP ap) {
             return 0.ToString();

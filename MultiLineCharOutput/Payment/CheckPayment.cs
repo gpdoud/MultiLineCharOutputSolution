@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using MultiLineCharOutput.Release;
 
-namespace MultiLineCharOutput {
+namespace MultiLineCharOutput.Payment {
 
-    public class CheckPayment : Payment {
+    public class CheckPayment : BasePayment {
 
         protected override string SetTransactionNumber(AP ap) {
             var sb = new StringBuilder();

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using MultiLineCharOutput.Release;
 
-namespace MultiLineCharOutput {
+namespace MultiLineCharOutput.Payment {
     
-    public class EftPayment : Payment {
+    public class EftPayment : BasePayment {
 
         protected override string SetRcrsAccountNum(AP ap) {
             return ap.RcrsAccountNum;

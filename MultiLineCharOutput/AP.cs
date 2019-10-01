@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MultiLineCharOutput {
-    
+
     public class AP {
 
         public static IList<AP> SqlQueryAp = new List<AP>() {
             new AP { PaymentMode = "C", CheckAmt = 123.45m, CheckDate = DateTime.Now },
-            new AP { PaymentMode = "E", CreditMemoInd = "D", EftAmt = 678.90m, EffectiveDate = DateTime.Now, 
+            new AP { PaymentMode = "E", CreditMemoInd = "D", EftAmt = 678.90m, EffectiveDate = DateTime.Now,
                 PaymentCurrencyCode = "CAD", OrigAccountType = "D", RecvPartAcctType = "S",
-                RcrsAccountNum = "123456789", RcrsTransitRoute = "7654321"
+                RcrsAccountNum = "123456789", RcrsTransitRoute = "7654321", PmpRemitanceInd = "*",
+                MessageText = "This is the message text"
             },
-            new AP { PaymentMode = "X" }
+            new AP { PaymentMode = "X", MessageText = "INVALID PAYMENT!" }
         };
 
-        #warning Unverfied properties exist
+#warning Unverfied properties exist
         public string PaymentCurrencyCode { get; set; } = "USD";
         public string SecCode { get; set; } = "XXX"; // other: ARC, BOC, TEL
         public string OrigAccountType { get; set; } = "G"; // or D (demand deposit acct) or MCA
         public string RecvPartAcctType { get; set; } = "C"; // D, G, or S
         public string RecvBankPrimaryIdType { get; set; } = string.Empty;
+        public string PmpRemitanceInd { get; set; } = " ";
+        public string InvManagerFlag { get; set; } = "Y";
+        public string MessageText { get; set; } = string.Empty;
 
         public string StatusInd { get; set; }
         public string Bank { get; set; }

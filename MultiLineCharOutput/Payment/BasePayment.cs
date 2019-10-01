@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using MultiLineCharOutput.Release;
 
-namespace MultiLineCharOutput {
+namespace MultiLineCharOutput.Payment {
 
-    public abstract class Payment : IFixedTextLine {
+    public abstract class BasePayment : IFixedTextLine {
         public static int _transNbr { get; protected set; } = 1;
 
         public const string PaymentMethodCheck = "CHK";
@@ -27,30 +27,41 @@ namespace MultiLineCharOutput {
         public string RcrsAccountNum { get; set; }
         public string RecvBankPrimaryIdType { get; set; }
         public string RecvBankPrimaryId { get; set; }
+        public string EddHandlingCode { get; set; }
+        public string InvManagerFlag { get; set; }
+        public string MessageText { get; set; }
+
+        private string Pad(int len) {
+            return string.Empty.ToFixedString(len);
+        }
 
         public string ToFixedTextLine() {
             var sb = new StringBuilder();
 
-            sb.Append(this.RecordId.ToFixedString(2));
-            sb.Append(this.PaymentMethod.ToFixedString(3));
-            sb.Append(this.CreditDebitFlag.ToFixedString(1));
-            sb.Append(this.TransactionNumber.ToFixedString(30));
-            sb.Append(this.ValueDate.ToString("yyyy-MM-dd").ToFixedString(10));
-            sb.Append(this.PaymentAmount.ToFixedStringRight(11, '0').ToFixedString(19));
-            sb.Append(this.CurrencyCode.ToFixedString(3));
-            sb.Append(this.OrigAccountType.ToFixedString(1));
-            sb.Append(this.OrigAccountNbr.ToFixedString(35));
-            sb.Append(this.OrigBankIdType.ToFixedString(3));
-            sb.Append(this.OrigBankId.ToFixedString(11));
-            sb.Append(this.RecvPartyAcctType.ToFixedString(1));
-            sb.Append(this.RcrsAccountNum.ToFixedString(35));
-            sb.Append(this.RecvBankPrimaryIdType.ToFixedString(3));
-            sb.Append(this.RecvBankPrimaryId.ToFixedString(11));
+            sb.Append(this.RecordId.ToFixedString(2)); // 1-2
+            sb.Append(this.PaymentMethod.ToFixedString(3)); // 3-5
+            sb.Append(this.CreditDebitFlag.ToFixedString(1)); // 6
+            sb.Append(this.TransactionNumber.ToFixedString(30)); // 7-36
+            sb.Append(this.ValueDate.ToString("yyyy-MM-dd").ToFixedString(10)); // 37-46
+            sb.Append(this.Pad(30)); // 47-56
+            sb.Append(this.PaymentAmount.ToFixedStringRight(11, '0').ToFixedString(19)); // 57-75
+            sb.Append(this.CurrencyCode.ToFixedString(3)); // 76-78
+            sb.Append(this.OrigAccountType.ToFixedString(1)); // 79
+            sb.Append(this.OrigAccountNbr.ToFixedString(35)); // 80-114
+            sb.Append(this.OrigBankIdType.ToFixedString(3)); // 115-117
+            sb.Append(this.OrigBankId.ToFixedString(11)); // 118-128
+            sb.Append(this.RecvPartyAcctType.ToFixedString(1)); // 129
+            sb.Append(this.RcrsAccountNum.ToFixedString(35)); // 130-164
+            sb.Append(this.RecvBankPrimaryIdType.ToFixedString(3)); // 165-167
+            sb.Append(this.RecvBankPrimaryId.ToFixedString(11)); // 168-178
+            sb.Append(this.EddHandlingCode.ToFixedString(1)); // 179
+            sb.Append(this.InvManagerFlag.ToFixedString(1)); // 180
+            sb.Append(this.MessageText.ToFixedString(160));
             
             return sb.ToString();
         }
 
-        public Payment(AP ap) {
+        public BasePayment(AP ap) {
             _transNbr++;
             this.RecordId = "PY";
             this.CreditDebitFlag = SetCreditDebitFlag(ap);
@@ -61,6 +72,9 @@ namespace MultiLineCharOutput {
             this.RcrsAccountNum = SetRcrsAccountNum(ap);
             this.RecvBankPrimaryIdType = ap.RecvBankPrimaryIdType;
             this.RecvBankPrimaryId = string.Empty;
+            this.EddHandlingCode = ap.PmpRemitanceInd;
+            this.InvManagerFlag = ap.InvManagerFlag;
+            this.MessageText = ap.MessageText;
         }
 
         protected abstract string SetTransactionNumber(AP ap);
