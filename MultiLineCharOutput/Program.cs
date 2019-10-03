@@ -1,5 +1,6 @@
 ﻿using MultiLineCharOutput.OrigPartyNameAddress;
 using MultiLineCharOutput.Payment;
+using MultiLineCharOutput.RecvPartyNameAddress;
 using System;
 using System.Collections.Generic;
 
@@ -20,24 +21,29 @@ namespace MultiLineCharOutput {
 
             BasePayment pymt = null;
             BaseOrigPartyNameAddress origNameAddr = null;
+            BaseRecvPartyNameAddress recvNameAddr = null;
             var aplist = AP.SqlQueryAp;
             foreach(var ap in aplist) {
                 switch(ap.PaymentMode) {
                     case PaymentMode.Check:
                         pymt = new CheckPayment(ap);
                         origNameAddr = new CheckOrigPartyNameAddress(ap);
+                        recvNameAddr = new CheckRecvPartyNameAddress(ap);
                         break;
                     case PaymentMode.Eft:
                         pymt = new EftPayment(ap);
                         origNameAddr = new EftOrigPartyNameAddress(ap);
+                        recvNameAddr = new EftRecvPartyNameAddress(ap);
                         break;
                     default:
                         pymt = new UnknownPayment(ap);
                         origNameAddr = new OtherOrigPartyNameAddress(ap);
+                        recvNameAddr = new OtherRecvPartyNameAddress(ap);
                         break;
                 }
                 AppendToOutput(pymt.ToFixedTextLine());
                 AppendToOutput(origNameAddr.ToFixedTextLine());
+                AppendToOutput(recvNameAddr.ToFixedTextLine());
             }
         }
         void AppendToOutput(string msg) {

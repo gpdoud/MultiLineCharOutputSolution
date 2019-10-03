@@ -6,6 +6,9 @@ namespace MultiLineCharOutput.Payment {
     
     public class UnknownPayment : BasePayment {
 
+        protected override string SetRecvBankPrimaryIdType(AP ap) {
+            return "---";
+        }
         protected override string SetTransactionNumber(AP ap) {
             return 0.ToString();
         }

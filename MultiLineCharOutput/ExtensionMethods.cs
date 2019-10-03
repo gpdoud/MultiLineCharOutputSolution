@@ -8,7 +8,6 @@ namespace MultiLineCharOutput.Release {
         public static string ToFixedString(this string str, int len) {
             return str.PadRight(len);
         }
-
         public static string ToFixedString(this int anInt, int len) {
             return anInt.ToString().ToFixedString(len);
         }

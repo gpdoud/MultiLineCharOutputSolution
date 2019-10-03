@@ -7,6 +7,9 @@ namespace MultiLineCharOutput.Payment {
 
     public class CheckPayment : BasePayment {
 
+        protected override string SetRecvBankPrimaryIdType(AP ap) {
+            return string.Empty;
+        }
         protected override string SetTransactionNumber(AP ap) {
             var sb = new StringBuilder();
             sb.Append(DateTime.Now.ToString("yyyyMMdd"));
@@ -17,7 +20,7 @@ namespace MultiLineCharOutput.Payment {
         public CheckPayment(AP ap) : base(ap) {
             this.PaymentMethod = PaymentMethodCheck;
             this.PaymentAmount = ap.CheckAmt;
-            this.ValueDate = ap.CheckDate;
+            this.ValueDate = DateTime.Parse(ap.CheckDate);
 
         }
     }

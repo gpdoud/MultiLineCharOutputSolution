@@ -14,12 +14,12 @@ namespace MultiLineCharOutput.Payment {
 
         public string RecordId { get; }
         public string PaymentMethod { get; set; }
-        public string CreditDebitFlag { get; set; }
+        public string CreditDebitFlag { get; set; } = "C"; // for all AP
         public string TransactionNumber { get; set; }
         public DateTime ValueDate { get; set; }
         public Decimal PaymentAmount { get; set; }
-        public string CurrencyCode { get; set; }
-        public string OrigAccountType { get; set; }
+        public string CurrencyCode { get; set; } = "USD"; // for all AP
+        public string OrigAccountType { get; set; } = "D"; // for all AP
         public string OrigAccountNbr { get; set; } = "2079900582725"; // Wells Fargo Acct Nbr
         public string OrigBankIdType { get; set; } = "ABA";
         public string OrigBankId { get; set; } = "053101561";
@@ -43,7 +43,7 @@ namespace MultiLineCharOutput.Payment {
             sb.Append(this.CreditDebitFlag.ToFixedString(1)); // 6
             sb.Append(this.TransactionNumber.ToFixedString(30)); // 7-36
             sb.Append(this.ValueDate.ToString("yyyy-MM-dd").ToFixedString(10)); // 37-46
-            sb.Append(this.Pad(30)); // 47-56
+            sb.Append(this.Pad(10)); // 47-56
             sb.Append(this.PaymentAmount.ToFixedStringRight(11, '0').ToFixedString(19)); // 57-75
             sb.Append(this.CurrencyCode.ToFixedString(3)); // 76-78
             sb.Append(this.OrigAccountType.ToFixedString(1)); // 79
@@ -64,18 +64,17 @@ namespace MultiLineCharOutput.Payment {
         public BasePayment(AP ap) {
             _transNbr++;
             this.RecordId = "PY";
-            this.CreditDebitFlag = SetCreditDebitFlag(ap);
             this.TransactionNumber = SetTransactionNumber(ap);
-            this.CurrencyCode = ap.PaymentCurrencyCode;
-            this.OrigAccountType = ap.OrigAccountType;
             this.RecvPartyAcctType = SetRecvPartyAcctType(ap);
             this.RcrsAccountNum = SetRcrsAccountNum(ap);
-            this.RecvBankPrimaryIdType = ap.RecvBankPrimaryIdType;
+            this.RecvBankPrimaryIdType = SetRecvBankPrimaryIdType(ap);
             this.RecvBankPrimaryId = string.Empty;
-            this.EddHandlingCode = ap.PmpRemitanceInd;
-            this.InvManagerFlag = ap.InvManagerFlag;
-            this.MessageText = ap.MessageText;
+            this.EddHandlingCode = string.Empty;
+            this.InvManagerFlag = string.Empty;
+            this.MessageText = string.Empty;
         }
+
+        protected abstract string SetRecvBankPrimaryIdType(AP ap);
 
         protected abstract string SetTransactionNumber(AP ap);
         /// <summary>
@@ -105,8 +104,5 @@ namespace MultiLineCharOutput.Payment {
             }
         }
 
-        protected virtual string SetCreditDebitFlag(AP ap) {
-            return ap.CreditMemoInd; // the default
-        }
     }
 }

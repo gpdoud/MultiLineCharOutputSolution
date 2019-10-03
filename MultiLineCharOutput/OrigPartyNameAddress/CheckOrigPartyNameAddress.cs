@@ -5,8 +5,7 @@ using System.Text;
 namespace MultiLineCharOutput.OrigPartyNameAddress {
     
     public class CheckOrigPartyNameAddress : BaseOrigPartyNameAddress {
-        public CheckOrigPartyNameAddress(AP ap) : base(ap) {
-
-        }
+        
+        public CheckOrigPartyNameAddress(AP ap) : base(ap) {}
     }
 }
