@@ -3,6 +3,7 @@ using MultiLineCharOutput.Payment;
 using MultiLineCharOutput.RecvPartyNameAddress;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MultiLineCharOutput {
 
@@ -22,35 +23,52 @@ namespace MultiLineCharOutput {
             BasePayment pymt = null;
             BaseOrigPartyNameAddress origNameAddr = null;
             BaseRecvPartyNameAddress recvNameAddr = null;
-            var aplist = AP.SqlQueryAp;
-            foreach(var ap in aplist) {
-                switch(ap.PaymentMode) {
-                    case PaymentMode.Check:
-                        pymt = new CheckPayment(ap);
-                        origNameAddr = new CheckOrigPartyNameAddress(ap);
-                        recvNameAddr = new CheckRecvPartyNameAddress(ap);
-                        break;
-                    case PaymentMode.Eft:
-                        pymt = new EftPayment(ap);
-                        origNameAddr = new EftOrigPartyNameAddress(ap);
-                        recvNameAddr = new EftRecvPartyNameAddress(ap);
-                        break;
-                    default:
-                        pymt = new UnknownPayment(ap);
-                        origNameAddr = new OtherOrigPartyNameAddress(ap);
-                        recvNameAddr = new OtherRecvPartyNameAddress(ap);
-                        break;
+            //var aplist = AP.SqlQueryAp;
+            using(var db = new AppDbContext()) {
+                foreach(var ap in db.APs.ToArray()) {
+                    switch(ap.PaymentMode) {
+                        case PaymentMode.Check:
+                            pymt = new CheckPayment(ap);
+                            origNameAddr = new CheckOrigPartyNameAddress(ap);
+                            recvNameAddr = new CheckRecvPartyNameAddress(ap);
+                            break;
+                        case PaymentMode.Eft:
+                            pymt = new EftPayment(ap);
+                            origNameAddr = new EftOrigPartyNameAddress(ap);
+                            recvNameAddr = new EftRecvPartyNameAddress(ap);
+                            break;
+                        default:
+                            pymt = new UnknownPayment(ap);
+                            origNameAddr = new OtherOrigPartyNameAddress(ap);
+                            recvNameAddr = new OtherRecvPartyNameAddress(ap);
+                            break;
+                    }
+                    AppendToOutput(pymt.ToFixedTextLine());
+                    AppendToOutput(origNameAddr.ToFixedTextLine());
+                    AppendToOutput(recvNameAddr.ToFixedTextLine());
                 }
-                AppendToOutput(pymt.ToFixedTextLine());
-                AppendToOutput(origNameAddr.ToFixedTextLine());
-                AppendToOutput(recvNameAddr.ToFixedTextLine());
+            }
+            WriteToOutput(linesOut);
+        }
+
+        private void WriteToOutput(List<string> linesOut) {
+            linesOut.ForEach(l => System.Diagnostics.Debug.WriteLine(l));
+        }
+
+        private void AppendToOutput(string msg) {
+            linesOut.Add(msg);
+        }
+        void InitDb() {
+            using(AppDbContext db = new AppDbContext()) {
+                AP.SqlQueryAp.ToList().ForEach(ap => {
+                    ap.Id = 0;
+                    db.APs.Add(ap);
+                });
+                db.SaveChanges();
             }
         }
-        void AppendToOutput(string msg) {
-            linesOut.Add(msg);
-            System.Diagnostics.Debug.WriteLine(msg);
-        }
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
             (new Program()).Run();
         }
         void TestPrototype() { 

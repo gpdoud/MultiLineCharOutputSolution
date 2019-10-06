@@ -8,6 +8,7 @@ namespace MultiLineCharOutput {
 
         public static IList<AP> SqlQueryAp = new List<AP>() {
             new AP {
+                Id = 1,
                 StatusInd = "D",
                 Bank = "Ken's Bank",
                 BankAcctNbr = "1111111111111",
@@ -47,6 +48,7 @@ namespace MultiLineCharOutput {
                 RecvPartAcctType = string.Empty
             },
             new AP {
+                Id = 2,
                 StatusInd = "D",
                 Bank = "Ken's Bank",
                 BankAcctNbr = "1111111111111",
@@ -86,6 +88,7 @@ namespace MultiLineCharOutput {
                 RecvPartAcctType = "C"
             },
             new AP {
+                Id = 3,
                 StatusInd = "D",
                 Bank = "Invalid Bank",
                 BankAcctNbr = "1010101010101",
@@ -126,6 +129,7 @@ namespace MultiLineCharOutput {
             }
         };
         #region Properties
+        public int Id { get; set; }
         public string StatusInd { get; set; }
         public string Bank { get; set; }
         public string BankAcctNbr { get; set; }
