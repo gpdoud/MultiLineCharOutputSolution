@@ -1,4 +1,5 @@
-﻿using MultiLineCharOutput.OrigPartyNameAddress;
+﻿using MultiLineCharOutput.Invoice;
+using MultiLineCharOutput.OrigPartyNameAddress;
 using MultiLineCharOutput.Payment;
 using MultiLineCharOutput.RecvPartyNameAddress;
 using System;
@@ -17,37 +18,43 @@ namespace MultiLineCharOutput {
         List<string> linesOut = new List<string>();
 
         void Run() {
-            var hdr = new Header();
-            AppendToOutput(hdr.ToFixedTextLine());
+            var trans = new Transactions();
 
-            BasePayment pymt = null;
-            BaseOrigPartyNameAddress origNameAddr = null;
-            BaseRecvPartyNameAddress recvNameAddr = null;
+            Transaction tran = null;
+            var key = string.Empty;
             //var aplist = AP.SqlQueryAp;
             using(var db = new AppDbContext()) {
-                foreach(var ap in db.APs.ToArray()) {
+                foreach(var ap in db.APs.OrderBy(a => a.EftAdviceNum).ToArray()) {
+                    tran = new Transaction();
+                    tran.Key = ap.EftAdviceNum;
                     switch(ap.PaymentMode) {
                         case PaymentMode.Check:
-                            pymt = new CheckPayment(ap);
-                            origNameAddr = new CheckOrigPartyNameAddress(ap);
-                            recvNameAddr = new CheckRecvPartyNameAddress(ap);
+                            tran.Payment = new CheckPayment(ap);
+                            tran.OrigPartyNameAddress = new CheckOrigPartyNameAddress(ap);
+                            tran.RecvPartyNameAddress = new CheckRecvPartyNameAddress(ap);
+                            tran.Invoice = new CheckInvoice(ap);
                             break;
                         case PaymentMode.Eft:
-                            pymt = new EftPayment(ap);
-                            origNameAddr = new EftOrigPartyNameAddress(ap);
-                            recvNameAddr = new EftRecvPartyNameAddress(ap);
+                            tran.Payment = new EftPayment(ap);
+                            tran.OrigPartyNameAddress = new EftOrigPartyNameAddress(ap);
+                            tran.RecvPartyNameAddress = new EftRecvPartyNameAddress(ap);
+                            tran.Invoice = new EftInvoice(ap);
                             break;
                         default:
-                            pymt = new UnknownPayment(ap);
-                            origNameAddr = new OtherOrigPartyNameAddress(ap);
-                            recvNameAddr = new OtherRecvPartyNameAddress(ap);
+                            tran.Payment = new UnknownPayment(ap);
+                            tran.OrigPartyNameAddress = new OtherOrigPartyNameAddress(ap);
+                            tran.RecvPartyNameAddress = new OtherRecvPartyNameAddress(ap);
+                            tran.Invoice = new UnknownInvoice(ap);
                             break;
                     }
-                    AppendToOutput(pymt.ToFixedTextLine());
-                    AppendToOutput(origNameAddr.ToFixedTextLine());
-                    AppendToOutput(recvNameAddr.ToFixedTextLine());
+                    
+                    trans.Add(tran);
                 }
             }
+            // all done. write the output lines
+            var hdr = new Header();
+            linesOut.Add(hdr.ToFixedTextLine());
+            linesOut.AddRange(trans.ToStringList());
             WriteToOutput(linesOut);
         }
 

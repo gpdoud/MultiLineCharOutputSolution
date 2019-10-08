@@ -5,7 +5,7 @@ using System.Text;
 namespace MultiLineCharOutput {
 
     public class AP {
-
+        #region Static AP transactions
         public static IList<AP> SqlQueryAp = new List<AP>() {
             new AP {
                 Id = 1,
@@ -90,6 +90,46 @@ namespace MultiLineCharOutput {
             new AP {
                 Id = 3,
                 StatusInd = "D",
+                Bank = "Ken's Bank",
+                BankAcctNbr = "1111111111111",
+                BankAcctTransit = "11111111",
+                RcrsTransitRoute = "111018214",
+                RcrsAccountNum = "17511411412151",
+                CompanyCode = "KEN",
+                DiscountAmt = 0,
+                EftAdviceNum = "5799",
+                EftAmt = 36.67m,
+                CheckNumber = "",
+                CheckDate = "9/23/2019",
+                CheckAmt = 36.67m,
+                EftTraceNum = "11111111115816",
+                EntryDate = "5/2/1991",
+                InvoiceAmt = 36.67m,
+                InvoiceDate = "9/30/2019",
+                NetInvoiceAmt = 36.67m,
+                PayDate = "10/1/2019",
+                PaymentId = "1111113",
+                PaymentMode = "E",
+                TinType = "P",
+                VendorId = "AG530393",
+                VendorName1 = "GREG DOUD",
+                GenericName2 = "",
+                AccountType = "C",
+                RemitAddress1 = "260 Riva ridge Ct",
+                RemitAddress2 = "",
+                RemitAddress3 = "",
+                RemitCity = "Loveland",
+                RemitCountryCode = "US",
+                RemitState = "OH",
+                RemitZipcode = "45140",
+                EffectiveDate = "9/1/2019",
+                SourceCode = "TESTING2",
+                TranHdrDesc = "VUEFT",
+                RecvPartAcctType = "C"
+            },
+            new AP {
+                Id = 99,
+                StatusInd = "D",
                 Bank = "Invalid Bank",
                 BankAcctNbr = "1010101010101",
                 BankAcctTransit = "10101010",
@@ -128,6 +168,7 @@ namespace MultiLineCharOutput {
                 RecvPartAcctType = "S"
             }
         };
+        #endregion
         #region Properties
         public int Id { get; set; }
         public string StatusInd { get; set; }
